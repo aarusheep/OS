@@ -1,0 +1,131 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dining Philosophers — Simple Guide</title>
+  <style>
+    body {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #263247;
+      line-height: 1.7;
+    }
+    h1, h2 { color: #4338a8; }
+    section {
+      margin: 20px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #17255410;
+    }
+    code, pre {
+      background: #eef0ff;
+      border-radius: 5px;
+    }
+    code { padding: 3px 5px; }
+    pre {
+      padding: 16px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    a { color: #4338a8; }
+  </style>
+</head>
+<body>
+  <h1>The Dining Philosophers Problem</h1>
+  <p>
+    This Operating Systems problem teaches us how multiple processes can
+    safely share limited resources.
+  </p>
+
+  <section>
+    <h2>1. What is the problem?</h2>
+    <p>
+      Imagine five philosophers sitting around a circular table. There is
+      one fork between every pair of philosophers. Each philosopher needs
+      two forks to eat: the left fork and the right fork.
+    </p>
+    <p>
+      If every philosopher picks up one fork and waits for another, nobody
+      can eat. This situation is called <strong>deadlock</strong>.
+    </p>
+  </section>
+
+  <section>
+    <h2>2. What is a semaphore?</h2>
+    <p>
+      A semaphore is a synchronization mechanism that controls access to
+      shared resources. Think of it as a counter that grants permission
+      to enter a restricted area.
+    </p>
+    <p>
+      <code>wait()</code> acquires a permit or waits until one is available.
+      <code>signal()</code> releases a resource or returns a permit.
+    </p>
+  </section>
+
+  <section>
+    <h2>3. Our solution: room = 4</h2>
+    <p>
+      We use a counting semaphore called <code>room</code>, initialized
+      to four, and five binary semaphores, one for each fork.
+    </p>
+    <p>
+      Only four philosophers may try to acquire forks at a time. This
+      prevents all five philosophers from each holding one fork and waiting
+      forever for the next fork.
+    </p>
+  </section>
+
+  <section>
+    <h2>4. Algorithm</h2>
+    <pre>
+room = 4
+fork[5] = {1, 1, 1, 1, 1}
+
+while (true) {
+    think()
+
+    wait(room)
+    wait(left fork)
+    wait(right fork)
+
+    eat()
+
+    signal(right fork)
+    signal(left fork)
+    signal(room)
+}</pre>
+  </section>
+
+  <section>
+    <h2>5. How does it work?</h2>
+    <ol>
+      <li>The philosopher thinks.</li>
+      <li>The philosopher acquires a room permit.</li>
+      <li>The philosopher acquires the left and right forks.</li>
+      <li>The philosopher eats.</li>
+      <li>The philosopher releases both forks.</li>
+      <li>The philosopher returns the room permit.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>6. Important concepts</h2>
+    <p><strong>Mutual exclusion:</strong> A fork cannot be held by two
+    philosophers at the same time.</p>
+    <p><strong>Deadlock:</strong> Processes wait indefinitely for resources
+    held by one another.</p>
+    <p><strong>Starvation:</strong> A philosopher may keep waiting while
+    others repeatedly get a chance to eat. This basic solution does not
+    guarantee fairness.</p>
+  </section>
+
+  <p><a href="/">Open the interactive 3D simulation</a></p>
+</body>
+</html>
